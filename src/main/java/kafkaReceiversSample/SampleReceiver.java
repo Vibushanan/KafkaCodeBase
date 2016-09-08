@@ -29,18 +29,23 @@ public class SampleReceiver {
 		props.put("value.deserializer",
 				"org.apache.kafka.common.serialization.StringDeserializer");
 		props.put("auto.commit.offset", false);
+		
 		KafkaConsumer<String,String> consumer = new KafkaConsumer<String,String>(props);
 	
-		Map<MetricName, ? extends Metric> g = consumer.metrics();
+		/*Map<MetricName, ? extends Metric> g = consumer.metrics();
 		
 		Set<?> ln = g.entrySet();
 		System.out.println("---------Metrics-----------------");
+		
+		
 		for(Object j : ln ){
 			
 			System.out.println("Name :"+j+" Value: "+g.get(j));
 		}
 		System.out.println("----------------------------------");
 		consumer.subscribe(Collections.singletonList("test1"));
+		*/
+		
 		Map<TopicPartition, OffsetAndMetadata> currentOffsets = new HashMap<TopicPartition, OffsetAndMetadata>();
 	
 		int count = 0;
@@ -48,6 +53,7 @@ public class SampleReceiver {
 		try{
 			
 			while(true){
+				
 				ConsumerRecords<String, String> records = consumer.poll(10000);
 				
 				System.out.println(records.partitions());
@@ -59,6 +65,8 @@ public class SampleReceiver {
 					ConsumerRecord<String, String> i = itr.next();
 					
 					System.out.println("Message  :"+count +i.toString());
+					
+					
 					if(count % 5 ==0){
 						System.out.println("Commititng");
 						System.out.println(i.topic());
