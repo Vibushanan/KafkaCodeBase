@@ -45,7 +45,7 @@ public class AvroProducer {
 	             avroRecord.put("int1", i);
 	             
 	             byte[] bytes = recordInjection.apply(avroRecord);
-	             ProducerRecord<String, byte[]> record = new ProducerRecord<String, byte[]>("TopicA", bytes);
+	             ProducerRecord<String, byte[]> record = new ProducerRecord<String, byte[]>("test", bytes);
 	             producer.send(record);
 	             Thread.sleep(250);
 	        }
