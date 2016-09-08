@@ -31,7 +31,7 @@ public class SampleReceiver {
 		props.put("auto.commit.offset", false);
 		
 		KafkaConsumer<String,String> consumer = new KafkaConsumer<String,String>(props);
-	
+	//
 		/*Map<MetricName, ? extends Metric> g = consumer.metrics();
 		
 		Set<?> ln = g.entrySet();
