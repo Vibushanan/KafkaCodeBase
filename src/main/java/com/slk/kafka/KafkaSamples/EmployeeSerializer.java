@@ -40,7 +40,7 @@ public class EmployeeSerializer implements Serializer<Employee>{
 			
 		}
 		
-		 buffer = ByteBuffer.allocate(4 + 4 + dataSize);
+		buffer = ByteBuffer.allocate(4 + 4 + dataSize);
 		buffer.putInt(data.getEmployeeID());
 		buffer.putInt(dataSize);
 		buffer.put(serializedData);

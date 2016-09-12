@@ -13,6 +13,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
+import org.apache.kafka.clients.consumer.OffsetCommitCallback;
 import org.apache.kafka.common.Metric;
 import org.apache.kafka.common.MetricName;
 import org.apache.kafka.common.TopicPartition;
@@ -29,9 +30,11 @@ public class SampleReceiver {
 		props.put("value.deserializer",
 				"org.apache.kafka.common.serialization.StringDeserializer");
 		props.put("auto.commit.offset", false);
+		
 		KafkaConsumer<String,String> consumer = new KafkaConsumer<String,String>(props);
 	
-		Map<MetricName, ? extends Metric> g = consumer.metrics();
+		
+		/*Map<MetricName, ? extends Metric> g = consumer.metrics();
 		
 		Set<?> ln = g.entrySet();
 		System.out.println("---------Metrics-----------------");
@@ -39,8 +42,10 @@ public class SampleReceiver {
 			
 			System.out.println("Name :"+j+" Value: "+g.get(j));
 		}
-		System.out.println("----------------------------------");
+		System.out.println("----------------------------------");*/
+		
 		consumer.subscribe(Collections.singletonList("test1"));
+		
 		Map<TopicPartition, OffsetAndMetadata> currentOffsets = new HashMap<TopicPartition, OffsetAndMetadata>();
 	
 		int count = 0;
@@ -50,16 +55,20 @@ public class SampleReceiver {
 			while(true){
 				ConsumerRecords<String, String> records = consumer.poll(10000);
 				
-				System.out.println(records.partitions());
-				System.out.println(records.count());
+				/*System.out.println(records.partitions());
+				System.out.println(records.count());*/
 								
 				Iterator<ConsumerRecord<String, String>> itr = records.iterator();
 				
+				
 				while(itr.hasNext()){
+				
 					ConsumerRecord<String, String> i = itr.next();
 					
 					System.out.println("Message  :"+count +i.toString());
-					if(count % 5 ==0){
+					
+				
+				/*	if(count % 5 ==0){
 						System.out.println("Commititng");
 						System.out.println(i.topic());
 						System.out.println(i.partition());
@@ -69,8 +78,19 @@ public class SampleReceiver {
 						
 						System.out.println(currentOffsets.values());
 						consumer.commitSync(currentOffsets);
+						
+							consumer.commitAsync(new OffsetCommitCallback() {
+						public void onComplete(Map<TopicPartition, OffsetAndMetadata> offsets,
+								Exception e) {
+								if (e != null){
+									
+								}
+								//log.error("Commit failed for offsets {}", offsets, e);
+								}});
+								
+								
 						count=0;
-					}
+					}*/
 					
 					
 					
@@ -87,4 +107,7 @@ public class SampleReceiver {
 		}
 		
 	}
+	
+
+	
 }
