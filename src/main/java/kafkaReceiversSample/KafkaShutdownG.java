@@ -1,23 +1,17 @@
 package kafkaReceiversSample;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
-
-import kafka.common.Topic;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.common.TopicPartition;
 
-public class SimpleKafkaConsumer {
-	
-	
-	
+public class KafkaShutdownG {
 
 	public static void main(String[] args) {
+
 	
 		
 		
@@ -30,11 +24,37 @@ public class SimpleKafkaConsumer {
 		props.put("value.deserializer",
 				"org.apache.kafka.common.serialization.StringDeserializer");
 
- KafkaConsumer<String,String> consumer = new KafkaConsumer<String,String>(props);
+		final KafkaConsumer<String,String> consumer = new KafkaConsumer<String,String>(props);
 		
 		
 		consumer.subscribe(Collections.singletonList("test"));
-
+try {
+			
+			Runtime.getRuntime().addShutdownHook(new Thread(){
+				  final Thread mainThread = Thread.currentThread();
+				public void run(){
+					System.out.println("Sleeping");
+					try {
+						Thread.sleep(10000);
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					System.out.println("Starting to Exit...........");
+					consumer.wakeup();
+					try {
+						mainThread.join();
+						} catch (InterruptedException e) {
+						e.printStackTrace();
+						}
+				}
+				
+			});
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
 		while(true){
 			
 			
@@ -50,6 +70,8 @@ public class SimpleKafkaConsumer {
 			}
 		}
 		
+	
+
 	}
 
 }
