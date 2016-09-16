@@ -17,7 +17,7 @@ public class KafkaCustomSerializer {
 
 	public static void main(String[] args) {
 		
-
+//tftftft
 		Properties props = new Properties();
 		props.put("bootstrap.servers", "10.172.20.27:9092");
 		props.put("retries", 0);
